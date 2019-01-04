@@ -6,7 +6,10 @@ build:
 #在 Docker alpine 容器的 50001 端口上运行 consignment-service 服务
 #可添加 -d 参数将微服务放到后台运行
 	protoc -I.  --go_out=plugins=micro:$(GOPATH)/src/shippy/consignment-service proto/consignment/consignment.proto
-	#GOOS=linux GOARCH=amd64 go build
-	#docker build -t consignment-service .
-#run:
-	#docker run -p 50051:50051 consignment-service
+	GOOS=linux CGO_ENABLED=0 GOARCH=amd64 go build
+	docker build -t consignment-service .
+run:
+	docker run -p 50051:50051 \
+     	 -e MICRO_SERVER_ADDRESS=:50051 \
+     	 -e MICRO_REGISTRY=mdns \
+     	 consignment-service
