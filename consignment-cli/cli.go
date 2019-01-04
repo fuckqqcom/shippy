@@ -15,7 +15,7 @@ import (
 
 const (
 	Address         = "localhost:50051"
-	DefaultInfoFile = "consignment-cli/consignment.json"
+	DefaultInfoFile = "consignment.json"
 )
 
 func parseFile(fileName string) (*pb.Consignment, error) {
