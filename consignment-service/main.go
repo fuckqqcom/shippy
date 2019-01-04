@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"github.com/micro/go-micro"
+	"github.com/micro/go-micro/server"
 	"log"
 	pb "shippy/consignment-service/proto/consignment"
 )
@@ -23,7 +24,8 @@ type Repository struct {
 }
 
 func (repo *Repository) Create(consignment *pb.Consignment) (*pb.Consignment, error) {
-	repo.consignments = append(repo.consignments, consignment)
+	updated := append(repo.consignments, consignment)
+	repo.consignments = updated
 	return consignment, nil
 }
 
@@ -45,25 +47,27 @@ func (s *service) CreateConsignment(ctx context.Context, req *pb.Consignment, re
 		return err
 	}
 
-	resp = &pb.Response{Created: true, Consignment: consignment}
+	resp.Created = true
+	resp.Consignment = consignment
 	return nil
 }
 
 func (s *service) GetConsignments(ctx context.Context, req *pb.GetRequest, resp *pb.Response) error {
-	allConsignments := s.repo.GetAll()
-	resp = &pb.Response{Consignments: allConsignments}
+	consignments := s.repo.GetAll()
+	resp.Consignments = consignments
 	return nil
 }
 
 func main() {
-	server := micro.NewService(
+
+	repo := Repository{}
+	srv := micro.NewService(
 		micro.Name("go.micro.srv.consignment"),
 		micro.Version("latest"),
 	)
 
-	server.Init()
-	repo := Repository{}
-	pb.RegisterShippingServiceHandler(server.Server(), &service{repo: repo})
+	srv.Init()
+	pb.RegisterShippingServiceHandler(srv.Server(), &service{repo})
 
 	if err := server.Run(); err != nil {
 		log.Fatalf("failed to serve: %v", err)
