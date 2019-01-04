@@ -7,6 +7,9 @@ service ShippingService {
 
     }
 
+    rpc GetConsignments (GetRequest) returns (Response){
+
+    }
 }
 
 //货轮承运的一批货物
@@ -33,4 +36,10 @@ message Container {
 message Response {
     bool created = 1; //托运成功
     Consignment consignment = 2;//新托运的货物
+    repeated Consignment consignments = 3;
+}
+
+//
+message GetRequest{
+
 }
