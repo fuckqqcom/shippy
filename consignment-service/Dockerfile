@@ -5,4 +5,4 @@ WORKDIR /app
 
 ADD /consignment-service /app/consignment-service
 
-CMD ["./consignment-service/consignment-service"]
+CMD ["./consignment-service"]
