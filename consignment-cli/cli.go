@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"github.com/micro/go-micro/client"
+	"github.com/micro/go-micro/cmd"
 	"google.golang.org/grpc"
 	"io/ioutil"
 	"log"
@@ -41,8 +43,8 @@ func main() {
 	}
 
 	defer conn.Close()
-
-	client := pb.NewShippingServiceClient(conn)
+	cmd.Init()
+	c := pb.NewShippingServiceClient("go.micro.srv.consignment", client.DefaultClient)
 
 	infoFile := DefaultInfoFile
 
@@ -55,14 +57,14 @@ func main() {
 		log.Fatalf("parse info file error: %v", err)
 	}
 
-	resp, err := client.CreateConsignment(context.Background(), consignment)
+	resp, err := c.CreateConsignment(context.Background(), consignment)
 	if err != nil {
 		log.Fatalf("create consignment error: %v", err)
 	}
 
 	log.Printf("created : %t", resp.Created)
 
-	resp, err = client.GetConsignments(context.Background(), &pb.GetRequest{})
+	resp, err = c.GetConsignments(context.Background(), &pb.GetRequest{})
 
 	if err != nil {
 		log.Fatalf("failed to list consignments: %v", err)
