@@ -49,6 +49,12 @@ func (s *service) CreateConsignment(ctx context.Context, req *pb.Consignment) (*
 	return resp, nil
 }
 
+func (s *service) GetConsignments(ctx context.Context, req *pb.GetRequest) (*pb.Response, error) {
+	allConsignments := s.repo.GetAll()
+	resp := &pb.Response{Consignments: allConsignments}
+	return resp, nil
+}
+
 func main() {
 	listener, err := net.Listen("tcp", Port)
 
