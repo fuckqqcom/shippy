@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"errors"
+	"fmt"
+	"github.com/micro/go-micro"
 	pb "shippy/vessel-service/proto/vessel"
 )
 
@@ -44,4 +46,18 @@ func (s *service) FindAvailable(ctx context.Context, spec *pb.Specification, res
 
 func main() {
 	vessels := []*pb.Vessel{{Id: "vessel0001", Capacity: 500, MaxWeight: 200000, Name: "Boaty McBoatface"}}
+	repo := &VesselRepository{vessels: vessels}
+
+	srv := micro.NewService(
+		micro.Name("go.micro.srv.vessel"),
+		micro.Version("latest"),
+	)
+
+	srv.Init()
+
+	pb.RegisterVesselServiceHandler(srv.Server(), &service{repo: repo})
+
+	if err := srv.Run(); err != nil {
+		fmt.Println("err--->", err)
+	}
 }

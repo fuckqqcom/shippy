@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="46df8f03-7ca0-481e-b4da-e200ec7257f4" name="Default Changelist" comment="" />
+    <list default="true" id="46df8f03-7ca0-481e-b4da-e200ec7257f4" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/consignment-service/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/consignment-service/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vessel-service/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/vessel-service/main.go" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,23 +45,48 @@
         </counts>
       </usages-collector>
     </session>
+    <session id="-870358206">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.open.time.0" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="Dockerfile" value="1" />
+          <entry key="go" value="3" />
+          <entry key="makefile" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="Go" value="3" />
+          <entry key="PLAIN_TEXT" value="2" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="go" value="466" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="Go" value="466" />
+        </counts>
+      </usages-collector>
+    </session>
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/consignment-service/proto/consignment/consignment.proto">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="4" selection-start-line="4" selection-end-line="4" />
-            </state>
-          </provider>
-        </entry>
-      </file>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/consignment-service/makefile">
+        <entry file="file://$PROJECT_DIR$/consignment-service/main.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="83" lean-forward="true" selection-start-line="3" selection-start-column="83" selection-end-line="3" selection-end-column="83" />
+            <state relative-caret-position="44">
+              <caret line="30" column="27" lean-forward="true" selection-start-line="30" selection-start-column="27" selection-end-line="31" selection-end-column="1" />
+              <folding>
+                <element signature="e#14#158#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -64,11 +94,16 @@
     </leaf>
   </component>
   <component name="GOROOT" path="D:\Program Files (x86)\Go" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/consignment-service/proto/consignment/consignment.proto" />
         <option value="$PROJECT_DIR$/consignment-service/makefile" />
+        <option value="$PROJECT_DIR$/vessel-service/main.go" />
+        <option value="$PROJECT_DIR$/consignment-service/main.go" />
       </list>
     </option>
   </component>
@@ -78,11 +113,9 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="-135" />
-    <option name="y" value="1466" />
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="width" value="1460" />
-    <option name="height" value="1400" />
+    <option name="height" value="1100" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -101,6 +134,15 @@
               <item name="shippy" type="b2602c69:ProjectViewProjectNode" />
               <item name="shippy" type="462c0819:PsiDirectoryNode" />
               <item name="consignment-service" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="shippy" type="b2602c69:ProjectViewProjectNode" />
+              <item name="shippy" type="462c0819:PsiDirectoryNode" />
+              <item name="vessel-service" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="shippy" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
             </path>
           </expand>
           <select />
@@ -128,10 +170,9 @@
     </option>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-108" y="1173" width="1168" height="1120" extended-state="0" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20810811" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15724947" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -161,15 +202,38 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/consignment-service/proto/consignment/consignment.proto">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
+        <state relative-caret-position="56">
           <caret line="4" selection-start-line="4" selection-end-line="4" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/consignment-service/makefile">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="83" lean-forward="true" selection-start-line="3" selection-start-column="83" selection-end-line="3" selection-end-column="83" />
+        <state relative-caret-position="42">
+          <caret line="3" column="43" selection-start-line="3" selection-start-column="43" selection-end-line="3" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vessel-service/makefile">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vessel-service/Dockerfile">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vessel-service/main.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="662">
+          <caret line="60" column="34" selection-start-line="60" selection-start-column="34" selection-end-line="60" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/consignment-service/main.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="44">
+          <caret line="30" column="27" lean-forward="true" selection-start-line="30" selection-start-column="27" selection-end-line="31" selection-end-column="1" />
+          <folding>
+            <element signature="e#14#158#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
