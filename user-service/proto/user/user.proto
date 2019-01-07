@@ -30,8 +30,8 @@ message Request {
 
 message Response {
     User user = 1;
-    bool valid = 2;
-    Error errors = 3;
+    repeated User users = 2;
+    repeated Error errors = 3;
 }
 
 message Token {
