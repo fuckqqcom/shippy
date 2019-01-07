@@ -62,13 +62,6 @@ func (s *service) CreateConsignment(ctx context.Context, req *pb.Consignment, re
 		return err
 	}
 
-	//接收新的货物
-	consignment, err := s.repo.Create(req)
-
-	if err != nil {
-		return err
-	}
-
 	resp.Created = true
 	resp.Consignment = consignment
 	return nil
@@ -82,14 +75,15 @@ func (s *service) GetConsignments(ctx context.Context, req *pb.GetRequest, resp 
 
 func main() {
 
-	repo := Repository{}
+	repo := &ConsignmentRepository{}
 	srv := micro.NewService(
 		micro.Name("go.micro.srv.consignment"),
 		micro.Version("latest"),
 	)
 
+	vesselClient := vesselProto.NewVesselServiceClient("go.micro.srv.vessel", srv.Client())
 	srv.Init()
-	pb.RegisterShippingServiceHandler(srv.Server(), &service{repo})
+	pb.RegisterShippingServiceHandler(srv.Server(), &service{repo, vesselClient})
 
 	if err := server.Run(); err != nil {
 		log.Fatalf("failed to serve: %v", err)
