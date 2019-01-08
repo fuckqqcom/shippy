@@ -22,6 +22,7 @@ services:
     container_name: user-cli
     environment:
       MICRO_REGISTRY: "mdns"
+    command: --name="Ewan Valentine"   --email="ewan.valentine89@gmail.com"  --password="Testing123" --company="BBC"
 
 
   mysql:
