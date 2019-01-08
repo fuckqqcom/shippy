@@ -6,8 +6,8 @@ import (
 )
 
 type handler struct {
-	repo         Repository
-	tokenService Authable
+	repo Repository
+	//tokenService Authable
 }
 
 func (h *handler) Create(ctx context.Context, req *pb.User, resp *pb.Response) error {

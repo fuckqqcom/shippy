@@ -9,46 +9,41 @@ import (
 type Repository interface {
 	Get(id string) (*pb.User, error)
 	GetAll() ([]*pb.User, error)
-	Create(user *pb.User) error
-	GetByEmailAndPassword(user *pb.User) (*pb.User, error)
+	Create(*pb.User) error
+	GetByEmailAndPassword(*pb.User) (*pb.User, error)
 }
 
 type UserRepository struct {
 	db *xorm.Engine
 }
 
+func (repo *UserRepository) Get(id string) (*pb.User, error) {
+	var u *pb.User
+	u.Id = id
+	if err := repo.db.Find(&u).Error; err != nil {
+		return nil, errors.New(err())
+	}
+	return u, nil
+}
+
 func (repo *UserRepository) GetAll() ([]*pb.User, error) {
 	var users []*pb.User
-
 	if err := repo.db.Find(&users).Error; err != nil {
 		return nil, errors.New(err())
 	}
-
 	return users, nil
 }
 
-func (repo *UserRepository) Get(id string) (*pb.User, error) {
-	var user *pb.User
-	user.Id = id
-
-	if err := repo.db.Find(&user).Error; err != nil {
-		return nil, errors.New(err())
-	}
-
-	return user, nil
-}
-
-func (repo *UserRepository) GetByEmailAndPassword(user *pb.User) (*pb.User, error) {
-	if err := repo.db.Find(&user).Error; err != nil {
-		return nil, errors.New(err())
-	}
-	return user, nil
-}
-
-func (repo *UserRepository) Create(user *pb.User) error {
-	if _, err := repo.db.Insert(user); err != nil {
+func (repo *UserRepository) Create(u *pb.User) error {
+	if _, err := repo.db.Insert(&u); err != nil {
 		return err
 	}
-
 	return nil
+}
+
+func (repo *UserRepository) GetByEmailAndPassword(u *pb.User) (*pb.User, error) {
+	if err := repo.db.Find(&u).Error; err != nil {
+		return nil, errors.New(err())
+	}
+	return u, nil
 }
