@@ -1,9 +1,8 @@
 package code
 
 import (
-	"errors"
 	"fmt"
-	"github.com/xormplus/xorm"
+	"github.com/jinzhu/gorm"
 	pb "shippy/user-service/proto/user"
 )
 
@@ -15,14 +14,14 @@ type Repository interface {
 }
 
 type UserRepository struct {
-	Db *xorm.Engine
+	Db *gorm.DB
 }
 
 func (repo *UserRepository) Get(id string) (*pb.User, error) {
 	var u *pb.User
 	u.Uid = id
 	if err := repo.Db.Find(&u).Error; err != nil {
-		return nil, errors.New(err())
+		return nil, err
 	}
 	return u, nil
 }
@@ -30,7 +29,7 @@ func (repo *UserRepository) Get(id string) (*pb.User, error) {
 func (repo *UserRepository) GetAll() ([]*pb.User, error) {
 	var users []*pb.User
 	if err := repo.Db.Find(&users).Error; err != nil {
-		return nil, errors.New(err())
+		return nil, err
 	}
 	return users, nil
 }
@@ -40,7 +39,7 @@ func (repo *UserRepository) Create(u *pb.User) error {
 	u.Password = "2222"
 	u.Company = "2222"
 
-	if _, err := repo.Db.Insert(u); err != nil {
+	if err := repo.Db.Create(u).Error; err != nil {
 		fmt.Printf("insert error--->%s,--->%s", err, u)
 		return err
 	}
@@ -49,7 +48,7 @@ func (repo *UserRepository) Create(u *pb.User) error {
 
 func (repo *UserRepository) GetByEmailAndPassword(u *pb.User) (*pb.User, error) {
 	if err := repo.Db.Find(&u).Error; err != nil {
-		return nil, errors.New(err())
+		return nil, err
 	}
 	return u, nil
 }

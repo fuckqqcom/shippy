@@ -19,8 +19,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("connect error: %v\n", err)
 	}
-	e := db.Sync2(pb.User{})
-	fmt.Println("sync err--->", e)
+	migrate := db.AutoMigrate(&pb.User{})
+	fmt.Println("sync err--->", migrate)
 	repo := &code.UserRepository{db}
 
 	s := micro.NewService(
