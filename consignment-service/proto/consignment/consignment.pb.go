@@ -317,6 +317,7 @@ func NewShippingServiceClient(serviceName string, c client.Client) ShippingServi
 func (c *shippingServiceClient) CreateConsignment(ctx context.Context, in *Consignment, opts ...client.CallOption) (*Response, error) {
 	req := c.c.NewRequest(c.serviceName, "ShippingService.CreateConsignment", in)
 	out := new(Response)
+	fmt.Println("out", out)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err

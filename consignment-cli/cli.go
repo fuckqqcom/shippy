@@ -4,9 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/micro/go-micro/client"
 	"github.com/micro/go-micro/cmd"
-	"google.golang.org/grpc"
 	"io/ioutil"
 	"log"
 	"os"
@@ -15,7 +15,7 @@ import (
 
 const (
 	Address         = "localhost:50051"
-	DefaultInfoFile = "consignment.json"
+	DefaultInfoFile = "consignment-cli/consignment.json"
 )
 
 func parseFile(fileName string) (*pb.Consignment, error) {
@@ -37,12 +37,12 @@ func parseFile(fileName string) (*pb.Consignment, error) {
 }
 
 func main() {
-	conn, err := grpc.Dial(Address, grpc.WithInsecure())
-	if err != nil {
-		log.Fatalf("connect error:%v", err)
-	}
+	//conn, err := grpc.Dial(Address, grpc.WithInsecure())
+	//if err != nil {
+	//	log.Fatalf("connect error:%v", err)
+	//}
 
-	defer conn.Close()
+	//defer conn.Close()
 	cmd.Init()
 	c := pb.NewShippingServiceClient("go.micro.srv.consignment", client.DefaultClient)
 
@@ -61,15 +61,17 @@ func main() {
 	if err != nil {
 		log.Fatalf("create consignment error: %v", err)
 	}
+	fmt.Println(resp)
 
-	log.Printf("created : %t", resp.Created)
-
-	resp, err = c.GetConsignments(context.Background(), &pb.GetRequest{})
-
-	if err != nil {
-		log.Fatalf("failed to list consignments: %v", err)
-	}
-	for _, c := range resp.Consignments {
-		log.Printf("%+v", c)
-	}
+	//
+	//log.Printf("created : %t", resp.Created)
+	//
+	//resp, err = c.GetConsignments(context.Background(), &pb.GetRequest{})
+	//
+	//if err != nil {
+	//	log.Fatalf("failed to list consignments: %v", err)
+	//}
+	//for _, c := range resp.Consignments {
+	//	log.Printf("%+v", c)
+	//}
 }

@@ -17,7 +17,7 @@ service UserService {
 
 //用户信息
 message User {
-    string id = 1;
+    string uid = 1;
     string name = 2;
     string company = 3;
     string email = 4;

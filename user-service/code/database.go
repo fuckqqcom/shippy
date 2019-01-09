@@ -1,22 +1,16 @@
-package main
+package code
 
 import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/xormplus/xorm"
-
-	"os"
 )
 
 func CreateConnection() (*xorm.Engine, error) {
-	host := os.Getenv("DB_HOST")
-	user := os.Getenv("DB_USER")
-	pwd := os.Getenv("DB_PWD")
-	dbName := os.Getenv("DB_NAME")
 	dns := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		user,
-		pwd,
-		host,
-		dbName)
+		"root",
+		"abc123456",
+		"47.75.105.53",
+		"demo")
 	return xorm.NewEngine("mysql", dns)
 }
