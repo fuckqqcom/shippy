@@ -20,7 +20,7 @@ type UserRepository struct {
 
 func (repo *UserRepository) Get(id string) (*pb.User, error) {
 	var u *pb.User
-	u.Id = id
+	u.Uid = id
 	if err := repo.Db.Find(&u).Error; err != nil {
 		return nil, errors.New(err())
 	}

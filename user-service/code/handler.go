@@ -21,7 +21,7 @@ func (h *Handler) Create(ctx context.Context, req *pb.User, resp *pb.Response) e
 }
 
 func (h *Handler) Get(ctx context.Context, req *pb.User, resp *pb.Response) error {
-	u, err := h.Repo.Get(req.Id)
+	u, err := h.Repo.Get(req.Uid)
 
 	if err != nil {
 		return err

@@ -52,7 +52,7 @@ func main() {
 			if err != nil {
 				log.Fatalf("Could not create: %v", err)
 			}
-			log.Printf("Created: %s", r.User.Id)
+			log.Printf("Created: %s", r.User.Uid)
 			getAll, err := client.GetAll(context.Background(), &pb.Request{})
 			if err != nil {
 				log.Fatalf("Could not list users: %v", err)
