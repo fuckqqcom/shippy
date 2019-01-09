@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/server"
 	"log"
@@ -48,7 +47,7 @@ func (s *service) CreateConsignment(ctx context.Context, req *pb.Consignment, re
 		Capacity:  int32(len(req.Containers)),
 	})
 
-	fmt.Printf("Found vessel:%s \n", vesselResponse.Vessel.Name)
+	//fmt.Printf("Found vessel:%s \n", vesselResponse.Vessel.Name)
 
 	if err != nil {
 		return err

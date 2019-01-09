@@ -13,7 +13,7 @@ import (
 
 func main() {
 	cmd.Init()
-	client := pb.NewUserServiceClient("go.micro.src.user", mClient.DefaultClient)
+	client := pb.NewUserServiceClient("go.micro.srv.user", mClient.DefaultClient)
 
 	service := micro.NewService(
 		micro.Flags(
@@ -38,16 +38,16 @@ func main() {
 	// Start as service
 	service.Init(
 		micro.Action(func(c *cli.Context) {
-			name := c.String("name")
-			email := c.String("email")
-			password := c.String("password")
-			company := c.String("company")
+			//name := c.String("name")
+			//email := c.String("email")
+			//password := c.String("password")
+			//company := c.String("company")
 			// Call our user service
 			r, err := client.Create(context.TODO(), &pb.User{
-				Name:     name,
-				Email:    email,
-				Password: password,
-				Company:  company,
+				Name:     "xiaohan",
+				Email:    "95028555@qq.com",
+				Password: "123",
+				Company:  "haha",
 			})
 			if err != nil {
 				log.Fatalf("Could not create: %v", err)
@@ -65,6 +65,6 @@ func main() {
 	)
 	// Run the server
 	if err := service.Run(); err != nil {
-		log.Println(err)
+		log.Println("log--->", err)
 	}
 }
