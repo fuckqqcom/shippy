@@ -35,10 +35,6 @@ func (repo *UserRepository) GetAll() ([]*pb.User, error) {
 }
 
 func (repo *UserRepository) Create(u *pb.User) error {
-	u.Name = "111"
-	u.Password = "2222"
-	u.Company = "2222"
-
 	if err := repo.Db.Create(u).Error; err != nil {
 		fmt.Printf("insert error--->%s,--->%s", err, u)
 		return err

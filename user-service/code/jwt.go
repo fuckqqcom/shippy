@@ -11,7 +11,7 @@ type Authable interface {
 	Encode(user *pb.User) (string, error)
 }
 
-var privateKey = []byte("xs#a_1")
+var privateKey = []byte("123wrgdgxs#ahfthfjy_119gdxfsdf9145sdnl")
 
 type CustomClaims struct {
 	User *pb.User
@@ -20,6 +20,18 @@ type CustomClaims struct {
 
 type TokenService struct {
 	repo Repository
+}
+
+func (t *TokenService) Decode(token string) (*CustomClaims, error) {
+	to, err := jwt.ParseWithClaims(token, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return privateKey, nil
+	})
+
+	if claims, ok := to.Claims.(*CustomClaims); ok && to.Valid {
+		return claims, nil
+	} else {
+		return nil, err
+	}
 }
 
 func (t *TokenService) Encode(user *pb.User) (string, error) {
