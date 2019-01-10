@@ -2,11 +2,13 @@ package main
 
 import (
 	"context"
-	mClient "github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/cmd"
 	"log"
 	"os"
+
 	pb "shippy/user-service/proto/user"
+
+	mClient "github.com/micro/go-micro/client"
+	"github.com/micro/go-micro/cmd"
 )
 
 func main() {

@@ -2,13 +2,18 @@ package code
 
 import (
 	"context"
-	"golang.org/x/crypto/bcrypt"
+	"errors"
+	"fmt"
+	"log"
+
 	pb "shippy/user-service/proto/user"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type Handler struct {
 	Repo         Repository
-	tokenService Authable
+	TokenService Authable
 }
 
 func (h *Handler) Create(ctx context.Context, req *pb.User, resp *pb.Response) error {
@@ -51,20 +56,24 @@ func (h *Handler) GetAll(ctx context.Context, req *pb.Request, resp *pb.Response
 }
 
 func (h *Handler) Auth(ctx context.Context, req *pb.User, resp *pb.Token) error {
-	u, err := h.Repo.GetByEmailAndPassword(req)
+	log.Println("Logging in with:", req.Email, req.Password)
 
+	u, err := h.Repo.GetByEmailAndPassword(req)
 	if err != nil {
 		return err
 	}
+	hashPwd := []byte(u.Password)
+	pwd := []byte(req.Password)
 
+	fmt.Println(1111, string(hashPwd))
+	fmt.Println(2222, string(pwd))
 	//进行密码验证
-
-	if err := bcrypt.CompareHashAndPassword([]byte(req.Password), []byte(u.Password)); err != nil {
+	if err := bcrypt.CompareHashAndPassword(hashPwd, pwd); err != nil { //注意：第二个参数一定是原始密码字符串，而非hash
+		log.Printf("bcrypt.CompareHashAndPassword error:%v", err)
 		return err
 	}
 
-	t, err := h.tokenService.Encode(u)
-
+	t, err := h.TokenService.Encode(u)
 	if err != nil {
 		return err
 	}
@@ -72,6 +81,20 @@ func (h *Handler) Auth(ctx context.Context, req *pb.User, resp *pb.Token) error 
 	return nil
 }
 
-func (s *Handler) ValidateToken(ctx context.Context, req *pb.Token, resp *pb.Token) error {
+func (srv *Handler) ValidateToken(ctx context.Context, req *pb.Token, resp *pb.Token) error {
+	// spew.Dump(req.Token)
+	// Decode token
+	claims, err := srv.TokenService.Decode(req.Token)
+	if err != nil {
+		return err
+	}
+
+	log.Println("get token", claims)
+
+	if claims.User.Uid == "" {
+		return errors.New("invalid user")
+	}
+
+	resp.Valid = true
 	return nil
 }

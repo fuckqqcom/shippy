@@ -1,9 +1,11 @@
 package code
 
 import (
-	"github.com/dgrijalva/jwt-go"
-	pb "shippy/user-service/proto/user"
 	"time"
+
+	pb "shippy/user-service/proto/user"
+
+	"github.com/dgrijalva/jwt-go"
 )
 
 type Authable interface {
@@ -19,7 +21,7 @@ type CustomClaims struct {
 }
 
 type TokenService struct {
-	repo Repository
+	Repo Repository
 }
 
 func (t *TokenService) Decode(token string) (*CustomClaims, error) {
@@ -46,6 +48,5 @@ func (t *TokenService) Encode(user *pb.User) (string, error) {
 	}
 
 	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-
 	return jwtToken.SignedString(privateKey)
 }

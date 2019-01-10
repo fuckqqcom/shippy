@@ -1,27 +1,28 @@
 package main
 
 import (
-	"fmt"
-	"github.com/micro/go-micro"
 	"log"
+
 	"shippy/user-service/code"
 	pb "shippy/user-service/proto/user"
+
+	"github.com/micro/go-micro"
 )
 
 func main() {
 	db, err := code.CreateConnection()
-
-	fmt.Printf("%+v\n", db)
-	fmt.Printf("err: %v\n", err)
-
 	defer db.Close()
-
 	if err != nil {
-		log.Fatalf("connect error: %v\n", err)
+		log.Fatalf("Could not connect to DB: %v", err)
 	}
-	migrate := db.AutoMigrate(&pb.User{})
-	fmt.Println("sync err--->", migrate)
-	repo := &code.UserRepository{db}
+
+	db.LogMode(true)
+	db.SingularTable(true)
+
+	db.AutoMigrate(&pb.User{})
+	repo := &code.UserRepository{DB: db}
+
+	tokenService := &code.TokenService{Repo: repo}
 
 	s := micro.NewService(
 		micro.Name("go.micro.srv.user"),
@@ -29,9 +30,7 @@ func main() {
 	)
 
 	s.Init()
-
-	pb.RegisterUserServiceHandler(s.Server(), &code.Handler{Repo: repo})
-
+	pb.RegisterUserServiceHandler(s.Server(), &code.Handler{Repo: repo, TokenService: tokenService})
 	if err := s.Run(); err != nil {
 		log.Fatalf("user service error: %v\n", err)
 	}
