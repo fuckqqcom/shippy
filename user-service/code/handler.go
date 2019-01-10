@@ -58,10 +58,10 @@ func (h *Handler) Auth(ctx context.Context, req *pb.User, resp *pb.Token) error 
 	}
 
 	//进行密码验证
-	//
-	//if err := bcrypt.CompareHashAndPassword([]byte(req.Password), []byte(u.Password)); err != nil {
-	//	return err
-	//}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(req.Password), []byte(u.Password)); err != nil {
+		return err
+	}
 
 	t, err := h.tokenService.Encode(u)
 
