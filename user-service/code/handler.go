@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/micro/go-micro"
 	"log"
 
 	pb "shippy/user-service/proto/user"
@@ -14,7 +15,10 @@ import (
 type Handler struct {
 	Repo         Repository
 	TokenService Authable
+	Publisher    micro.Publisher
 }
+
+const Topic = "user.created"
 
 func (h *Handler) Create(ctx context.Context, req *pb.User, resp *pb.Response) error {
 	pwd, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
@@ -30,6 +34,11 @@ func (h *Handler) Create(ctx context.Context, req *pb.User, resp *pb.Response) e
 	}
 
 	resp.User = req
+
+	//发布带有用户所有信息的消息
+	if err := h.Publisher.Publish(ctx, req); err != nil {
+		return err
+	}
 	return nil
 }
 
