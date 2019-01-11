@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"github.com/micro/go-micro"
 	"log"
@@ -26,13 +27,13 @@ func main() {
 	}
 }
 
-//func (sub *Subscriber) Process666(ctx context.Context, user *pb.User) error {
-//	log.Println("[Picked up a new message]")
-//	log.Println("[Sending email to]:", user)
-//	return nil
-//}
+func (sub *Subscriber) Process666(ctx context.Context, user *pb.User) error {
+	log.Println("[Picked up a new message]")
+	log.Println("[Sending email to]:", user)
+	return nil
+}
 
-func (sub *Subscriber) senEmail(user *pb.User) error {
+func (sub *Subscriber) SenEmail(ctx context.Context, user *pb.User) error {
 
 	log.Printf("senEmail ---> [SENDING A EMAIL TO %s...]", user.Name)
 	return nil
