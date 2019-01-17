@@ -4,8 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/micro/go-micro"
 	"log"
+
+	"github.com/micro/go-micro"
 
 	pb "shippy/user-service/proto/user"
 
@@ -56,6 +57,7 @@ func (h *Handler) Get(ctx context.Context, req *pb.User, resp *pb.Response) erro
 func (h *Handler) GetAll(ctx context.Context, req *pb.Request, resp *pb.Response) error {
 	u, err := h.Repo.GetAll()
 
+	fmt.Println(u)
 	if err != nil {
 		return err
 	}
