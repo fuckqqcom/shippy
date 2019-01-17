@@ -3,13 +3,42 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
+
+	hello "shippy/greeter/service/proto"
+	user "shippy/user-service/proto/user"
+
 	"github.com/gin-gonic/gin"
 	"github.com/micro/go-micro/client"
 	"github.com/micro/go-web"
-	"log"
-	hello "shippy/greeter/service/proto"
-	user "shippy/user-service/proto/user"
 )
+
+func main() {
+	service := web.NewService(web.Name("go.micro.api.greeter"))
+	service.Handle("/", New().r)
+	if err := service.Run(); err != nil {
+		log.Fatal(err)
+	}
+
+}
+
+type Engine struct {
+	srv *ServiceClient
+	r   *gin.Engine
+}
+
+func New() (e *Engine) {
+	e = &Engine{
+		srv: NewServiceClient(),
+		r:   gin.Default(),
+	}
+	e.r.GET("/greeter", Anything)
+	e.r.GET("/greeter/:name", e.Hello)
+	e.r.GET("/create", e.CreateUser)
+	e.r.GET("/getAll", e.GetAllUser)
+	e.r.GET("/auth", e.Auth)
+	return
+}
 
 type ServiceClient struct {
 	cl hello.SayService
@@ -29,11 +58,10 @@ func Anything(c *gin.Context) {
 
 }
 
-func (s ServiceClient) Hello(c *gin.Context) {
+func (e *Engine) Hello(c *gin.Context) {
 	log.Printf("received say.Hello api request")
 	name := c.Param("name")
-
-	resp, err := s.cl.Hello(context.TODO(), &hello.Request{
+	resp, err := e.srv.cl.Hello(context.TODO(), &hello.Request{
 		Name: name,
 	})
 
@@ -44,13 +72,13 @@ func (s ServiceClient) Hello(c *gin.Context) {
 	c.JSON(200, resp)
 }
 
-func (s ServiceClient) CreateUser(c *gin.Context) {
+func (e *Engine) CreateUser(c *gin.Context) {
 	name := c.Query("name")
 	email := c.Query("email")
 	pwd := c.Query("pwd")
 	company := c.Query("company")
 
-	resp, err := s.u.Create(context.TODO(), &user.User{
+	resp, err := e.srv.u.Create(context.TODO(), &user.User{
 		Name: name, Email: email, Password: pwd, Company: company})
 
 	if err != nil {
@@ -62,12 +90,11 @@ func (s ServiceClient) CreateUser(c *gin.Context) {
 
 }
 
-func (s ServiceClient) GetAllUser(c *gin.Context) {
+func (e *Engine) GetAllUser(c *gin.Context) {
 	log.Printf("received user.GetAllUser api request")
-	fmt.Println("cl--->", s.u)
+	fmt.Println("cl--->", e.srv.u)
 
-	allResp, err := s.u.GetAll(context.Background(), &user.Request{})
-
+	allResp, err := e.srv.u.GetAll(context.Background(), &user.Request{})
 	if err != nil {
 		log.Fatalf("call GetAll error:%v", err)
 		c.JSON(200, err)
@@ -79,12 +106,11 @@ func (s ServiceClient) GetAllUser(c *gin.Context) {
 	c.JSON(200, allResp)
 }
 
-func (s ServiceClient) Auth(c *gin.Context) {
+func (e *Engine) Auth(c *gin.Context) {
 	email := c.Query("email")
 	pwd := c.Query("pwd")
 	fmt.Println("auth--->", email, pwd)
-	fmt.Println("cl--->", s.u)
-	authResp, err := s.u.Auth(context.Background(), &user.User{
+	authResp, err := e.srv.u.Auth(context.Background(), &user.User{
 		Email:    email,
 		Password: pwd,
 	})
@@ -94,27 +120,4 @@ func (s ServiceClient) Auth(c *gin.Context) {
 	}
 	log.Println("token: ", authResp.Token)
 	c.JSON(200, authResp.Token)
-}
-
-func main() {
-	service := web.NewService(web.Name("go.micro.api.greeter"))
-
-	service.Init()
-	serviceClient := NewServiceClient()
-	fmt.Println("serviceClient--->", serviceClient.cl, serviceClient.u)
-	s := ServiceClient{serviceClient.cl, serviceClient.u}
-
-	r := gin.Default()
-	r.GET("/greeter", Anything)
-	r.GET("/greeter/:name", s.Hello)
-	r.GET("/create", s.CreateUser)
-	r.GET("/getAll", s.GetAllUser)
-	r.GET("/auth", s.Auth)
-
-	service.Handle("/", r)
-
-	if err := service.Run(); err != nil {
-		log.Fatal(err)
-	}
-
 }
