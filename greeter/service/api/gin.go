@@ -12,11 +12,9 @@ import (
 	"github.com/micro/go-web"
 )
 
-type Say struct {
-}
-
-var cl hello.SayService
-var u user.UserServiceClient
+var (
+	engine *Engine
+)
 
 func Anything(c *gin.Context) {
 	log.Print("received say.Anything api request")
@@ -27,7 +25,7 @@ func Anything(c *gin.Context) {
 func Hello(c *gin.Context) {
 	log.Printf("received say.Hello api request")
 	name := c.Param("name")
-	resp, err := cl.Hello(context.TODO(), &hello.Request{
+	resp, err := engine.srv.cl.Hello(context.TODO(), &hello.Request{
 		Name: name,
 	})
 
@@ -44,7 +42,7 @@ func CreateUser(c *gin.Context) {
 	pwd := c.Query("pwd")
 	company := c.Query("company")
 
-	resp, err := u.Create(context.TODO(), &user.User{
+	resp, err := engine.srv.u.Create(context.TODO(), &user.User{
 		Name: name, Email: email, Password: pwd, Company: company})
 
 	if err != nil {
@@ -59,9 +57,7 @@ func CreateUser(c *gin.Context) {
 func GetAllUser(c *gin.Context) {
 	log.Printf("received user.GetAllUser api request")
 
-	fmt.Println(u)
-	allResp, err := u.GetAll(context.Background(), &user.Request{})
-
+	allResp, err := engine.srv.u.GetAll(context.Background(), &user.Request{})
 	if err != nil {
 		log.Fatalf("call GetAll error:%v", err)
 		c.JSON(200, err)
@@ -77,7 +73,7 @@ func Auth(c *gin.Context) {
 	email := c.Query("email")
 	pwd := c.Query("pwd")
 	fmt.Println("auth--->", email, pwd)
-	authResp, err := u.Auth(context.Background(), &user.User{
+	authResp, err := engine.srv.u.Auth(context.Background(), &user.User{
 		Email:    email,
 		Password: pwd,
 	})
@@ -95,10 +91,22 @@ func main() {
 		web.Name("go.micro.srv.user"),
 	)
 	service.Init()
-	// init service obj
-	cl = hello.NewSayService("go.micro.srv.greeter", client.DefaultClient)
-	u = user.NewUserServiceClient("go.micro.srv.user", client.DefaultClient)
 
+	engine = New()
+
+	service.Handle("/", engine.r)
+	if err := service.Run(); err != nil {
+		log.Fatal(err)
+	}
+
+}
+
+type Engine struct {
+	srv *ServiceClient
+	r   *gin.Engine
+}
+
+func New() *Engine {
 	r := gin.Default()
 	r.GET("/greeter", Anything)
 	r.GET("/greeter/:name", Hello)
@@ -106,10 +114,20 @@ func main() {
 	r.GET("/getAll", GetAllUser)
 	r.GET("/auth", Auth)
 
-	service.Handle("/", r)
-
-	if err := service.Run(); err != nil {
-		log.Fatal(err)
+	return &Engine{
+		srv: NewServiceClient(),
+		r:   r,
 	}
+}
 
+type ServiceClient struct {
+	cl hello.SayService
+	u  user.UserServiceClient
+}
+
+func NewServiceClient() *ServiceClient {
+	return &ServiceClient{
+		cl: hello.NewSayService("go.micro.srv.greeter", client.DefaultClient),
+		u:  user.NewUserServiceClient("go.micro.srv.user", client.DefaultClient),
+	}
 }
