@@ -90,7 +90,10 @@ func Auth(c *gin.Context) {
 }
 
 func main() {
-	service := web.NewService(web.Name("go.micro.api.greeter"))
+	service := web.NewService(
+		web.Name("go.micro.api.greeter"),
+		web.Name("go.micro.srv.user"),
+	)
 	service.Init()
 	// init service obj
 	cl = hello.NewSayService("go.micro.srv.greeter", client.DefaultClient)
