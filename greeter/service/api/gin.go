@@ -3,12 +3,13 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/micro/go-micro/client"
-	"github.com/micro/go-web"
 	"log"
 	hello "shippy/greeter/service/proto"
 	user "shippy/user-service/proto/user"
+
+	"github.com/gin-gonic/gin"
+	"github.com/micro/go-micro/client"
+	"github.com/micro/go-web"
 )
 
 type Say struct {
@@ -58,6 +59,7 @@ func CreateUser(c *gin.Context) {
 func GetAllUser(c *gin.Context) {
 	log.Printf("received user.GetAllUser api request")
 
+	fmt.Println(u)
 	allResp, err := u.GetAll(context.Background(), &user.Request{})
 
 	if err != nil {
@@ -89,9 +91,10 @@ func Auth(c *gin.Context) {
 
 func main() {
 	service := web.NewService(web.Name("go.micro.api.greeter"))
-
 	service.Init()
+	// init service obj
 	cl = hello.NewSayService("go.micro.srv.greeter", client.DefaultClient)
+	u = user.NewUserServiceClient("go.micro.srv.user", client.DefaultClient)
 
 	r := gin.Default()
 	r.GET("/greeter", Anything)
