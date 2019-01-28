@@ -14,7 +14,7 @@ import (
 )
 
 func main() {
-	service := web.NewService(web.Name("go.micro.api.greeter"))
+	service := web.NewService(web.Name("go.micro.api.greeter"), web.Address("localhost:8090"))
 	service.Handle("/", New().r)
 	if err := service.Run(); err != nil {
 		log.Fatal(err)
